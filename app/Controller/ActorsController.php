@@ -24,7 +24,23 @@ class ActorsController extends AppController {
 	* Starter page for viewing authors
 	*/	
 	public function index() {
-		$actors = $this->Actor->fetchAll();
+		if ($this->request->is('post')) {
+			$filters = $this->request->data['Filter'];
+			$actors = $this->Actor->fetchAll($filters);
+		} else {
+			$actors = $this->Actor->fetchAll();
+			$filters = array(
+				'LastName'    => '',
+				'BillingRate' => ''
+			);
+		}
+		
+		// hack for wild apostrophes
+		foreach ($filters AS $key=>$val) {
+			$filters[trim($key, "'")] = $val;
+		}
+
+		$this->set('filters', $filters);
 		$this->set('actors', $actors);
 	}
 	

@@ -64,6 +64,13 @@ class Actor {
 		$actors[1] = array('id'            => 1,
 						   'firstName'     => 'Tim',
 						   'lastName'      => 'Crider',
+						   'address'       => '1234 Main Str',
+						   'address2'      => 'Apt 123',
+						   'city'		   => 'Anytown',
+						   'state'		   => 'MD',
+						   'zipCode'       => '12345-5555',
+						   'phone'		   => '555-123-1234',
+						   'email'         => 'timcrider@gmail.com',
 						   'role'          => 'Developer',
 						   'billingRate'   => '19.99/hr',
 						   'interviewDate' => time(),
@@ -98,6 +105,83 @@ class Actor {
 		$fields['lastName'] = array(
 			'name'       => 'lastName',
 			'label'      => 'Last name',
+			'type'       => 'string',
+			'hidden'     => false,
+			'validation' => 'notempty',
+			'maxLength'  => 255,
+			'required'   => true,
+			'core'       => true
+		);
+
+		$fields['address'] = array(
+			'name'       => 'address',
+			'label'      => 'Address',
+			'type'       => 'string',
+			'hidden'     => false,
+			'validation' => 'notempty',
+			'maxLength'  => 255,
+			'required'   => true,
+			'core'       => true
+		);
+
+		$fields['address2'] = array(
+			'name'       => 'address2',
+			'label'      => 'Address 2',
+			'type'       => 'string',
+			'hidden'     => false,
+			'validation' => 'notempty',
+			'maxLength'  => 255,
+			'required'   => false,
+			'core'       => true
+		);
+
+		$fields['city'] = array(
+			'name'       => 'city',
+			'label'      => 'City',
+			'type'       => 'string',
+			'hidden'     => false,
+			'validation' => 'notempty',
+			'maxLength'  => 255,
+			'required'   => true,
+			'core'       => true
+		);
+
+		$fields['state'] = array(
+			'name'       => 'state',
+			'label'      => 'State',
+			'type'       => 'string',
+			'hidden'     => false,
+			'validation' => 'notempty',
+			'maxLength'  => 255,
+			'required'   => true,
+			'core'       => true
+		);
+
+		$fields['zipCode'] = array(
+			'name'       => 'zipCode',
+			'label'      => 'Zip Code',
+			'type'       => 'string',
+			'hidden'     => false,
+			'validation' => 'notempty',
+			'maxLength'  => 255,
+			'required'   => true,
+			'core'       => true
+		);
+
+		$fields['phone'] = array(
+			'name'       => 'phone',
+			'label'      => 'Phone',
+			'type'       => 'string',
+			'hidden'     => false,
+			'validation' => 'notempty',
+			'maxLength'  => 255,
+			'required'   => true,
+			'core'       => true
+		);
+
+		$fields['email'] = array(
+			'name'       => 'email',
+			'label'      => 'Email',
 			'type'       => 'string',
 			'hidden'     => false,
 			'validation' => 'notempty',
@@ -216,8 +300,60 @@ class Actor {
 		return $maxid;
 	}
 	
-	public function fetchAll() {
-		return $this->actors;
+	protected function filter($filter, $value, $actors = array(), $exclude=true) {
+		// ignore empty filters
+		if (empty($value)) {
+			return $actors;
+		}
+		
+		// hacking in clean up for goofy post var passing
+		$filter = trim($filter, "'");
+		$matches = array();
+
+		foreach ($actors AS $id=>$actor) {
+			switch ($filter) {
+				case 'LastName':
+					if (preg_match("/{$value}/i", $actor['lastName'])) {
+						$matches[$id] = $id;
+					} else {
+						// @todo Make this work to allow matching any
+						if ($exclude) {
+							break;
+						}
+					}
+			
+				case 'BillingRate':
+					if (preg_match("/{$value}/i", $actor['billingRate'])) {
+						$matches[$id] = $id;
+					} else {
+						// @todo Make this work to allow matching any
+						if ($exclude) {
+							break;
+						}
+					}
+			}		
+		}
+
+		$out = array();
+
+		foreach ($matches AS $match) {
+			$out[$match] = $actors[$match];
+		}
+		
+		return $out;
+	}
+	
+	public function fetchAll($filters = array()) {
+		if (empty($filters)) {
+			return $this->actors;
+		}
+		
+		$matches = $this->actors;
+		
+		foreach ($filters AS $filter=>$value) {
+			$matches = $this->filter($filter, $value, $matches, true);
+		}
+		return $matches;
 	}
 	
 	public function fetchFields() {

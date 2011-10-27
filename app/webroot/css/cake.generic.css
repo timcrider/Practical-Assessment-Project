@@ -292,6 +292,7 @@ form .input {
 }
 form .required {
 	font-weight: bold;
+	color: #e32;
 }
 form .required label:after {
 	color: #e32;
@@ -389,6 +390,7 @@ form .reset input[type=reset] {
 form .reset input[type=reset]:hover {
 	background: #5BA150;
 }
+
 /* Form errors */
 form .error {
 	background: #FFDACC;

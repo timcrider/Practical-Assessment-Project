@@ -14,7 +14,7 @@
 <body>
 	<div id="container">
 		<div id="header">
-			<h1><a href="/">Practical Assessment Project</a></h1>
+			<h1><a href="/">Practical Assessment Project Home</a></h1>
 
 		</div>
 		<div id="content">
@@ -22,7 +22,7 @@
 			<?=$content_for_layout?>
 		</div>
 		<div id="footer">
-			<p>Here we go....</p>
+			<p>Page generated on <?=date('l jS \of F Y h:i:s A'); ?> for <?=$_SERVER['REMOTE_ADDR'];?><p>
 		</div>
 	</div>
 

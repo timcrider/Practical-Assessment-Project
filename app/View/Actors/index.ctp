@@ -4,6 +4,23 @@
 | <a href="/actors/flush/" onClick="return confirm('Flushing the data will reset the json db to default settings.\n Are you sure?');">Flush Data</a>
 </p>
 
+<h3>Filter</h3>
+<?=$this->Form->create('', array('action' => 'index')); ?>
+<table>
+	<tr>
+		<td>Last Name</td>
+		<td><input type="text" name="Filter['LastName']" value="<?php print htmlentities($filters['LastName']); ?>" /></td>
+	</tr>
+
+	<tr>
+		<td>Billing Rate</td>
+		<td><input type="text" name="Filter['BillingRate']" value="<?php print htmlentities($filters['BillingRate']); ?>" /></td>
+	</tr>
+</table>
+
+<?= $this->Form->end('Filter Records'); ?>
+
+<h3>Actors List: <?=count($actors)?></h3>
 <table>
 	<tr>
 		<th>Actor</th>

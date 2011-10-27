@@ -41,5 +41,5 @@ foreach ($actor AS $key=>$value) {
 	}
 }
 
-print $this->Form->button('Reset', array('type' => 'reset'));
+print "<div class='reset'>".$this->Form->button('Reset', array('type' => 'reset'))."</div>";
 print $this->Form->end('Update Actor');
