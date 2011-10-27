@@ -1,32 +1,52 @@
 <?php
+/**
+* Actor Model
+*/
 
 class Actor {
+	// Needed for framework
 	public $primaryKey = 'id';
 
+	// Location of the json db files, this must be changed in app/Config/core.php
 	protected $actorsFile;
 	protected $fieldsFile;
 	
+	// Holders for the data
 	protected $actors = array();
 	protected $fields = array();
 	
+	// States of the model, and an error stack
+	// @todo Error stack is populated but not displayed on the front end. Should have option to enable
 	public $installed = false;
 	public $working   = true;
 	public $errors    = array();
 
+	/**
+	* Initialize our model and data set
+	*/
 	public function __construct() {
-		if ($this->_init()) {
-		}
+		$this->_init();
 	}
 	
+	/**
+	* Destroy the json data files
+	*/
 	public function flush() {
 		unlink($this->actorsFile);
 		unlink($this->fieldsFile);
 	}
 	
+	/**
+	* Quick test for checking if we have had any errors in the model
+	*/
 	public function hasErrors() {
 		return (empty($this->errors)) ? false : true;
 	}
 	
+	/**
+	* Initialze the data. This method is the core of how the json database would work
+	* @todo Remove this and move it to a DataSource so it could easily be ported to other datatypes
+	*/
 	private function _init() {
 		// Load the actors data
 		$this->actorsFile = Configure::read('Actor.dbFile');
@@ -53,11 +73,19 @@ class Actor {
 		
 		return $this->hasErrors();
 	}
-	
+
+	/**
+	* This is needed by the framework
+	*/	
 	public function schema() {
 		return $this->fields;
 	}
-	
+
+	/**
+	* Populate the default data sets
+	* @note This is where you add new fields to the data sets.
+	* @todo Cleanup this method and add a few more test records
+	*/	
 	private function _initData() {
 		$actors = array();
 		
@@ -237,10 +265,18 @@ class Actor {
 		$this->writeDatafile($this->fieldsFile, $fields);
 	}
 
+	/**
+	* Convert the current recordset into a data store
+	* @todo Move this into a datasource
+	*/
 	private function writeDatafile($file, $data = array()) {
 		file_put_contents($file, json_encode($data));
 	}
 
+	/**
+	* Convert the current data store into a record set
+	* @todo Move this into a datasource
+	*/
 	private function openDatafile($file) {
 		$data = file_get_contents($file);
 
@@ -276,14 +312,26 @@ class Actor {
 	}
 
 
+	/**
+	* Calls the loader and stores fields locally
+	* @todo Add in better integrity tests here
+	*/
 	private function _loadFields() {
 		$this->fields = $this->openDataFile($this->fieldsFile);
 	}
 	
+	/**
+	* Calls the loader and stores actor locally
+	* @todo Add in better integrity tests here
+	*/
 	private function _loadActors() {
 		$this->actors = $this->openDataFile($this->actorsFile);
 	}
 
+	/**
+	* Fetch the next available sequence ID
+	* @note This is only valid for records, not fields since fields have text keys
+	*/
 	public function getNextId($data = array()) {
 		$maxid = 0;
 		foreach ($data AS $record) {
@@ -299,7 +347,12 @@ class Actor {
 		}
 		return $maxid;
 	}
-	
+
+	/**
+	* Limit records based on a filter
+	* @todo Add date range
+	* @todo Work on making exclude toggle work in allowing ANY match instead of ALL match
+	*/	
 	protected function filter($filter, $value, $actors = array(), $exclude=true) {
 		// ignore empty filters
 		if (empty($value)) {
@@ -342,7 +395,11 @@ class Actor {
 		
 		return $out;
 	}
-	
+
+	/**
+	* Fetch all the actors, and if a filters array is specified filter out data
+	* @todo Allow passing of filter type
+	*/	
 	public function fetchAll($filters = array()) {
 		if (empty($filters)) {
 			return $this->actors;
@@ -355,12 +412,17 @@ class Actor {
 		}
 		return $matches;
 	}
-	
+
+	/**
+	* Feth the current field stack
+	*/	
 	public function fetchFields() {
 		return $this->fields;
 	}
 	
-	
+	/**
+	* Fetch a single actor record based on the id
+	*/	
 	public function find($id = null) {
 		if (empty($this->actors[$id])) {
 			$this->errors[] = "Record {$id} does not exist";
@@ -369,7 +431,10 @@ class Actor {
 		
 		return $this->actors[$id];
 	}
-	
+
+	/**
+	* Convert the cake time array into a stamp we can use
+	*/	
 	public function date2timestamp($date = array()) {
 		if ($date['meridian'] == 'pm') {
 			$date['hour'] += 12;
@@ -378,6 +443,9 @@ class Actor {
 		return mktime($date['hour'], $date['min'], 0, $date['month'], $date['day'], $date['year']);
 	}
 
+	/**
+	* Create an actor
+	*/
 	public function add($record = null) {
 		$record['id']            = $this->getNextId($this->actors);
 		$record['interviewDate'] = $this->date2timestamp($record['interviewDate']);
@@ -393,6 +461,10 @@ class Actor {
 		return $record;
 	}
 	
+	/**
+	* Update actor based on id
+	* @todo Work on moving updates to a backup data store to enable versioning
+	*/
 	public function update($id = null, $record = null) {
 		if (empty($this->actors[$id])) {
 			$this->errors[] = "Record {$id} does not exist";
@@ -407,7 +479,11 @@ class Actor {
 		$this->writeDatafile($this->actorsFile, $this->actors);
 		return true;
 	}
-	
+
+	/**
+	* Remove actor based on id
+	* @todo Work on moving removals to a backup data store in order to pull records out of the trash
+	*/	
 	public function delete($id = null) {
 		if (empty($this->actors[$id])) {
 			$this->errors[] = "Record {$id} does not exist";

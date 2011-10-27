@@ -1,11 +1,20 @@
 <?php
+/**
+* Main application controller
+*/
 
+// This requires the Actor model
 App::import('Model', 'Actor');
 
 class ActorsController extends AppController {
+	// Uses HTML Forms
 	public $helpers = array('Html', 'Form');
 	public $name    = 'Actors';
 	
+    /**
+    *  This method is called before the calling of any specific front end method.
+    * Adding in all data prep work here and calling the parent after done
+    */
 	public function beforeFilter() {
 		// Setup Actors
 		$this->Actor = new Actor;
@@ -60,7 +69,9 @@ class ActorsController extends AppController {
 	}
 	
 	/**
-	*
+	*  Reset the json database to default data. This is purely a testing function and should not
+	* be active when the site launches.
+	* @launch REMOVE ACCESS TO THIS FUNCTION
 	*/
 	public function flush() {
 		$this->Actor->flush();
@@ -68,7 +79,7 @@ class ActorsController extends AppController {
 	}
 	
 	/**
-	*
+	* Remove an actor based on the ID, and send the user back to the front page with a status.
 	*/
 	public function delete($id = null) {
 		if ($this->Actor->delete($id)) {
@@ -81,7 +92,7 @@ class ActorsController extends AppController {
 	}
 	
 	/**
-	*
+	* Update an actor based on the ID, and send the user back to the front page with a status.
 	*/
 	public function edit($id = null) {
 		$actor = $this->Actor->find($id);
