@@ -1,28 +1,68 @@
-CakePHP is a rapid development framework for PHP which uses commonly known design patterns like Active Record, Association Data Mapping, Front Controller and MVC. Our primary goal is to provide a structured framework that enables PHP users at all levels to rapidly develop robust web applications, without any loss to flexibility.
+Practical Assessment Project
+10/26/2011
+Timothy M. Crider
+timcrider@gmail.com
 
-The Cake Software Foundation - promoting development related to CakePHP
-http://cakefoundation.org/
+INSTALLATION
+------------
+1. Make the folder that will contain the web root. ex: /var/www/sites/adg/
+2. Run: git clone git://github.com/timcrider/Practical-Assessment-Project.git html
+3. This will have created: /var/www/sites/adg/html/
+4. change ownership of all the files under html/app/tmp/ to the web server. ec: chown -R apache html/app/tmp/
+5. Your site should be working.
 
-CakePHP - the rapid development PHP framework
-http://www.cakephp.org
+Assumptions:
+1. Tested on CentOS 5.7 (Final)
+2. Tested on Apache 2.2.20
+3. Tested using PHP 5.3.8
 
-Cookbook - user documentation for learning about CakePHP
-http://book.cakephp.org
 
-API - quick reference to CakePHP
-http://api.cakephp.org
+TASK GOALS
+----------
+1.	No login functionality is required.
+Status: [COMPLETE]
 
-The Bakery - everything CakePHP
-http://bakery.cakephp.org
 
-The Show - live and archived podcasts about CakePHP and more
-http://live.cakephp.org
+2.	Data should be read from and written to a JSON file stored on a shared folder on the C-drive of the web server.
+Status: [COMPLETE]
 
-CakePHP TV - screen casts from events and video tutorials
-http://tv.cakephp.org
 
-CakePHP Google Group - community mailing list and forum
-http://groups.google.com/group/cake-php
+3.	User should be allowed to filter the list of actors by last name, billing rate, and interview date.
+Status: [FUNCTIONAL]
+ Filtering by last name and billing rate are functional. I did not get to implement range of interview dates
 
-#cakephp on irc.freenode.net - chat with CakePHP developers
-irc://irc.freenode.net/cakephp
+
+4.	Required content should be clearly marked, and validated before submission. 
+Status: [FUNCTIONAL]
+ Required fields are marked. They need to be styled, and front end validation needs to be added.
+
+
+5.	Optional data should be validated before submission where appropriate.
+Status: [DEPENDS ON 4]
+ This will be completed when 4 is, since they both share the same structure as core fields.
+
+
+6.	Reset button should exist to clear fields on add and edit screens.
+Status: [FUNCTIONAL]
+ This is functional, but needs styling
+
+
+7.	User should be warned before deleting an actor from the system.
+Status: [COMPLETE]
+ Used onclick="return confirm();" on the delete links in order to force a warning and action to delete.
+
+
+8.	No HTML should be allowed in the notes field.  The notes field should be restricted to 500 characters.
+Status: [FUNCTIONAL]
+ I have removed tags and limited the text to 500 characters in the model. This is not done on the front end.
+
+
+9.	No server-side validators should be used (use asp.net validators or javascript).
+Status: [NOT DONE]
+ Did not have time to work on front end styling or javascript validation
+
+10.	The application should be designed and implemented so that additional actor fields will be easy to add.
+Status: [COMPLETE]
+ Fields are stored in a separate json database but are referenced when building data interactions. It would
+be very simple to add another manager to handle fields.
+
