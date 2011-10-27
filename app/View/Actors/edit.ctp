@@ -1,21 +1,24 @@
-<h1>Create A New Actor</h1>
+<h1>Update Actor</h1>
 <?php
-print $this->Form->create('Actor');
 
-foreach ($fields AS $field) {
-	// Hidden form fields aren't needed in adds
+print $this->Form->create('Actor', array('action' => "edit/{$actor['id']}"));
+
+foreach ($actor AS $key=>$value) {
+	$field = $fields[$key];
+
 	if (!$field['hidden']) {
-       	if ($field['required']) {
-            $required = '<span class="required">Field Required</span>';
-       	} else {
-            $required = '';
-       	}
+		if ($field['required']) {
+			$required = '<span class="required">Field Required</span>';
+		} else {
+			$required = '';
+		}
 
 		switch ($field['type']) {
 			case 'string':
 			case 'text':
 				print $this->Form->input($field['name'],
 										 array(
+										 	'value' => $value,
 										 	'before' => $required
 										 ));
 				break;
@@ -27,7 +30,7 @@ foreach ($fields AS $field) {
 										 	'before'     => $required,
 										 	'dateFormat' => 'DMY', 
 										 	'minYear'    => date('Y'),
-										 	'value'      => time(), 
+										 	'value'      => $value, 
 										 	'maxYear'    => date('Y') + 5));
 				break;
 				
@@ -39,4 +42,4 @@ foreach ($fields AS $field) {
 }
 
 print $this->Form->button('Reset', array('type' => 'reset'));
-print $this->Form->end('Create Actor');
+print $this->Form->end('Update Actor');

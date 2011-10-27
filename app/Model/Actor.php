@@ -18,6 +18,11 @@ class Actor {
 		}
 	}
 	
+	public function flush() {
+		unlink($this->actorsFile);
+		unlink($this->fieldsFile);
+	}
+	
 	public function hasErrors() {
 		return (empty($this->errors)) ? false : true;
 	}
@@ -62,7 +67,7 @@ class Actor {
 						   'role'          => 'Developer',
 						   'billingRate'   => '19.99/hr',
 						   'interviewDate' => time(),
-						   'notes'         => '');
+						   'notes'         => 'This is an example note.');
 
 		$this->writeDatafile($this->actorsFile, $actors);
 
@@ -154,7 +159,7 @@ class Actor {
 
 	private function openDatafile($file) {
 		$data = file_get_contents($file);
-		
+
 		if (empty($data)) {
 			$this->errors[] = "Unable to open data file: {$file}\n";
 			return array();
@@ -164,6 +169,7 @@ class Actor {
 			$this->errors[] = "Unable to fetch data from file: {$file}\n";
 			return array();
 		}
+
 		
 		$records = array();
 
@@ -195,7 +201,19 @@ class Actor {
 	}
 
 	public function getNextId($data = array()) {
-	
+		$maxid = 0;
+		foreach ($data AS $record) {
+			if ($record['id'] > $maxid) {
+				$maxid = $record['id'];
+			}
+		}
+		$maxid++;
+		
+		if (!empty($data[$maxid])) {
+			$this->errors[] = "Id collision for {$maxid}, cannot create record.";
+			return false;
+		}
+		return $maxid;
 	}
 	
 	public function fetchAll() {
@@ -207,19 +225,60 @@ class Actor {
 	}
 	
 	
-	public function find() {
+	public function find($id = null) {
+		if (empty($this->actors[$id])) {
+			$this->errors[] = "Record {$id} does not exist";
+			return false;
+		}
+		
+		return $this->actors[$id];
+	}
 	
+	public function date2timestamp($date = array()) {
+		if ($date['meridian'] == 'pm') {
+			$date['hour'] += 12;
+		}
+
+		return mktime($date['hour'], $date['min'], 0, $date['month'], $date['day'], $date['year']);
 	}
 
 	public function add($record = null) {
-	
+		$record['id']            = $this->getNextId($this->actors);
+		$record['interviewDate'] = $this->date2timestamp($record['interviewDate']);
+		
+		if (!$record['id']) {
+			$this->errors[] = "Unable to create record";
+			return false;
+		}
+		
+		$this->actors[$record['id']] = $record;
+		$this->writeDatafile($this->actorsFile, $this->actors);
+		return $record;
 	}
 	
-	public function update($record = null) {
+	public function update($id = null, $record = null) {
+		if (empty($this->actors[$id])) {
+			$this->errors[] = "Record {$id} does not exist";
+			return false;
+		}
 	
+		$record['id']            = $id;
+		$record['interviewDate'] = $this->date2timestamp($record['interviewDate']);
+		$this->actors[$id]       = $record;
+		
+		$this->writeDatafile($this->actorsFile, $this->actors);
+		return true;
 	}
 	
-	public function delete($recordId) {
+	public function delete($id = null) {
+		if (empty($this->actors[$id])) {
+			$this->errors[] = "Record {$id} does not exist";
+			return false;
+		}
+		
+		unset($this->actors[$id]);
+		$this->writeDatafile($this->actorsFile, $this->actors);
+		return true;
 	
 	}
 

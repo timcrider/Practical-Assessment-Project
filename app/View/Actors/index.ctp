@@ -1,5 +1,9 @@
 <h1>Welcome to the actors index</h1>
-<p><?php print $this->Html->link('Create Actor', array('action' => 'add')); ?></p>
+<p>
+<a href="/actors/add/">Create Actor</a> 
+| <a href="/actors/flush/" onClick="return confirm('Flushing the data will reset the json db to default settings.\n Are you sure?');">Flush Data</a>
+</p>
+
 <table>
 	<tr>
 		<th>Actor</th>
@@ -16,8 +20,8 @@
 			<td><?php print $actor['role']; ?></td>
 			<td><?php print date('l jS \of F Y h:i:s A', $actor['interviewDate']); ?></td>
 			<td><?php 
-                printf('<a href="/view/%1$d">Edit this record</a> ' .
-                       '| <a href="/delete/%1$d" onClick="return confirm(\'Are you sure you want to delete this record?\');">Delete</a>',
+                printf('<a href="/actors/edit/%1$d">Edit this record</a> ' .
+                       '| <a href="/actors/delete/%1$d" onClick="return confirm(\'Are you sure you want to delete this record?\');">Delete</a>',
                        $actor['id']);
 				?></td>
 		</tr>
@@ -25,6 +29,7 @@
 
 </table>
 
-<p><?php print $this->Html->link('Create Actor', array('action' => 'add')); ?></p>
-
-
+<p>
+<a href="/actors/add/">Create Actor</a> 
+| <a href="/actors/flush/" onClick="return confirm('Flushing the data will reset the json db to default settings.\n Are you sure?');">Flush Data</a>
+</p>

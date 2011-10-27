@@ -1,0 +1,52 @@
+Practical Assessment Project
+10/26/2011
+Timothy M. Crider
+timcrider@gmail.com
+
+TASK GOALS
+----------
+1.	No login functionality is required.
+Status: [COMPLETE]
+
+
+2.	Data should be read from and written to a JSON file stored on a shared folder on the C-drive of the web server.
+Status: [COMPLETE]
+
+
+3.	User should be allowed to filter the list of actors by last name, billing rate, and interview date.
+Status: [NOT DONE]
+
+
+4.	Required content should be clearly marked, and validated before submission. 
+Status: [FUNCTIONAL]
+ Required fields are marked. They need to be styled, and front end validation needs to be added.
+
+
+5.	Optional data should be validated before submission where appropriate.
+Status: [DEPENDS ON 4]
+ This will be completed when 4 is, since they both share the same structure as core fields.
+
+
+6.	Reset button should exist to clear fields on add and edit screens.
+Status: [FUNCTIONAL]
+ This is functional, but needs styling
+
+
+7.	User should be warned before deleting an actor from the system.
+Status: [COMPLETE]
+ Used onclick="return confirm();" on the delete links in order to force a warning and action to delete.
+
+
+8.	No HTML should be allowed in the notes field.  The notes field should be restricted to 500 characters.
+Status: [NOT DONE]
+
+
+9.	No server-side validators should be used (use asp.net validators or javascript).
+Status: [NOT DONE]
+
+
+10.	The application should be designed and implemented so that additional actor fields will be easy to add.
+Status: [COMPLETE]
+ Fields are stored in a separate json database but are referenced when building data interactions. It would
+be very simple to add another manager to handle fields.
+
