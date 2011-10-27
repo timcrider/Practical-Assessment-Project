@@ -3,6 +3,20 @@ Practical Assessment Project
 Timothy M. Crider
 timcrider@gmail.com
 
+INSTALLATION
+------------
+1. Make the folder that will contain the web root. ex: /var/www/sites/adg/
+2. Run: git clone git://github.com/timcrider/Practical-Assessment-Project.git html
+3. This will have created: /var/www/sites/adg/html/
+4. change ownership of all the files under html/app/tmp/ to the web server. ec: chown -R apache html/app/tmp/
+5. Your site should be working.
+
+Assumptions:
+1. Tested on CentOS 5.7 (Final)
+2. Tested on Apache 2.2.20
+3. Tested using PHP 5.3.8
+
+
 TASK GOALS
 ----------
 1.	No login functionality is required.
