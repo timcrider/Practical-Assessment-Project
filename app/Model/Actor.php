@@ -381,6 +381,7 @@ class Actor {
 	public function add($record = null) {
 		$record['id']            = $this->getNextId($this->actors);
 		$record['interviewDate'] = $this->date2timestamp($record['interviewDate']);
+		$record['notes']         = substr(strip_tags($record['notes']), 0, 500);
 		
 		if (!$record['id']) {
 			$this->errors[] = "Unable to create record";
@@ -400,6 +401,7 @@ class Actor {
 	
 		$record['id']            = $id;
 		$record['interviewDate'] = $this->date2timestamp($record['interviewDate']);
+        $record['notes']         = substr(strip_tags($record['notes']), 0, 500);
 		$this->actors[$id]       = $record;
 		
 		$this->writeDatafile($this->actorsFile, $this->actors);

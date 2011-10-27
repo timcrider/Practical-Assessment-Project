@@ -14,7 +14,8 @@ Status: [COMPLETE]
 
 
 3.	User should be allowed to filter the list of actors by last name, billing rate, and interview date.
-Status: [NOT DONE]
+Status: [FUNCTIONAL]
+ Filtering by last name and billing rate are functional. I did not get to implement range of interview dates
 
 
 4.	Required content should be clearly marked, and validated before submission. 
@@ -38,12 +39,13 @@ Status: [COMPLETE]
 
 
 8.	No HTML should be allowed in the notes field.  The notes field should be restricted to 500 characters.
-Status: [NOT DONE]
+Status: [FUNCTIONAL]
+ I have removed tags and limited the text to 500 characters in the model. This is not done on the front end.
 
 
 9.	No server-side validators should be used (use asp.net validators or javascript).
 Status: [NOT DONE]
-
+ Did not have time to work on front end styling or javascript validation
 
 10.	The application should be designed and implemented so that additional actor fields will be easy to add.
 Status: [COMPLETE]
